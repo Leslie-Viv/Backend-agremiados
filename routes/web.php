@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/crear-usuario', [UserController::class, 'crearUsuario']);
+Route::post('crear-usuario', [UserController::class, 'crearUsuario']);

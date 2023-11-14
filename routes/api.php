@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AgremiadosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("login",[UserController::class,"login"]);
 Route::post("user",[UserController::class,"user"])->middleware("auth:api");
+
+Route::controller(AgremiadosController::class)->group (function(){
+    Route::post("nuevoagremiado",'nuevoAgremiado');
+    Route::get('agremiado', 'getAgremiado');
+});
+

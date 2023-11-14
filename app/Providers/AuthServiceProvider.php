@@ -14,12 +14,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //'App\Models\Model' => 'App\Polices\ModelPolicy'
+        'App\Models\Model' => 'App\Polices\ModelPolicy'
         //
     ];
 
     /** 
-     * @return void
+     @return void
      */
 
     
@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
     {
 
         $this->registerPolicies();
-        Passport::routes();
+   
 
         //
     }
