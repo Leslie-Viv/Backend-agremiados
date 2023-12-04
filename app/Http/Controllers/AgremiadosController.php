@@ -4,51 +4,69 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Agremiados;
-
+use Illuminate\Support\Facades\Storage;
+use App\Models\agremiados;
+use App\Models\User;
 
 class AgremiadosController extends Controller
 {
-    //
-
-    public function nuevoagremiado(Request $request){
-        $validator=Validator::make ($request-> all(),[
-            'apellidopaterno'=> 'string | max:50',
-           'apellidomaterno'=> 'string | max:50',
-            'nombres'=> 'string | max:50',
-            'sexo'=> 'string | max:50',
-            'NUP'=> 'string | max:50',
-            'NUE'=> 'string | max:50',
-            'RFC'=> 'string | max:50',
-            'NSS'=> 'string | max:50',
-           'fechadenacimiento'=> 'string | max:50',
-            'telefono'=> 'string | max:10',
-            'cuota'=> 'numeric'
+    public function nuevoAgremiado(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'apellidopaterno' => 'required',
+            'apellidomaterno' => 'required',
+            'nombres' => 'required',
+            'sexo' => 'required',
+            'NUP' => 'required',
+            'NUE' => 'required', // Asegura que NUE sea único en la tabla
+            'RFC' => 'required',
+            'NSS' => 'required',
+            'fechadenacimiento' => 'required|date',
+            'telefono' => 'required',
+            'cuota' => 'required|numeric',
         ]);
 
-        if($validator->fails()){
-            return response()-> json(['Errors'=>$validator->errors()],422);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-        $agremiado=Agremiados::create([
-            'apellidopaterno'=> $request->apellidopaterno,
-            'apellidomaterno'=>  $request->apellidomaterno,
-             'nombres'=>  $request->nombres,
-             'sexo'=>  $request->sexo,
-             'NUP'=>  $request->NUP,
-             'NUE'=>  $request->NUE,
-             'RFC'=>  $request->RFC,
-             'NSS'=>  $request->NSS,
-            'fechadenacimiento'=>  $request->fechadenacimiento,
-             'telefono'=>  $request->telefono,
-             'cuota'=>  $request->cuota 
+
+        $agremiado = agremiados::create($request->all());
+        User::create([
+            'NUE' => $request->NUE,
+            'password' => bcrypt($request->NUE),
+            'id_rol' => 1
         ]);
-
-        return response()-> json(['Agremiado'=>$agremiado],201);
-
+        return response($agremiado, 200);
     }
 
-    public function getAgremiado(){
-        return response()->json(Agremiados::all(), 200);
+
+    public function getAgremiado()
+    {
+        return response()->json(agremiados::all(), 200);
     }
 
+
+    public function deleteAgremiadoById($id)
+    {
+        $agremiado = agremiados::find($id);
+        if (is_null($agremiado)) {
+            return response()->json(['message' => 'Agremiado no encontrado'], 404);
+        }
+        $agremiado->delete();
+        return response()->json(['message' => 'Agremiado eliminado exitosamente'], 200);
+    }
+
+
+    public function updateAgremiado(Request $request, $id)
+    {
+        $agremiado = agremiados::find($id);
+
+        if (!$agremiado) {
+            return response()->json(['message' => 'Agremiado no encontrado'], 404);
+        }
+
+        $agremiado->update($request->all());
+
+        return response()->json(['message' => 'Agremiado actualizado con éxito']);
+    }
 }

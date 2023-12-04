@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('agremiados', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('apellidopaterno');
             $table->string('apellidomaterno');
             $table->string('nombres');
-            $table->string('sexo');
-            $table->string('NUP');
-            $table->string('NUE');
-            $table->string('RFC');
-            $table->string('NSS');
-            $table->string('fechadenacimiento');
-            $table->string('telefono');
-            $table->integer('cuota');
+            $table->enum('sexo', ['Hombre', 'Mujer', 'No_especificado'],);
+            $table->string('NUP', 10)->unique();
+            $table->string('NUE')->unique();
+            $table->string('RFC', 13)->unique();
+            $table->string('NSS', 11)->unique();
+            $table->date('fechadenacimiento');
+            $table->string('telefono', 10);
+            $table->enum('cuota', [1, 0]);
+            $table->timestamps();
         });
     }
 

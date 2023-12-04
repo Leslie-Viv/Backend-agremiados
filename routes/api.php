@@ -22,8 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 });
 
-Route::post("login",[UserController::class,"login"]);
-Route::post("user",[UserController::class,"user"])->middleware("auth:api");
+Route::controller(UserController::class)->group (function(){
+    Route::post('login','loginUsuario');
+    Route::get('usuarios', 'getUsuarios');
+     Route::post('nuevousuario', 'newUsuario');
+});
 
 Route::controller(AgremiadosController::class)->group (function(){
     Route::post("nuevoagremiado",'nuevoAgremiado');
