@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgremiadosController;
+use App\Http\Controllers\SolicitudesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +32,14 @@ Route::controller(UserController::class)->group (function(){
 Route::controller(AgremiadosController::class)->group (function(){
     Route::post("nuevoagremiado",'nuevoAgremiado');
     Route::get('agremiado', 'getAgremiado');
+    Route::delete('eliminarAgremiado/{id}', 'deleteAgremiadoById');
+    Route::post('actualizarAgremiado/{id}', 'updateAgremiado');
 });
 
+Route::controller(SolicitudesController::class)->group(function () {
+    Route::patch('actualizarsolicitud/{id}', 'updateSolicitud');
+    Route::get('obtenerSolicitud', 'getSolicitud');
+    Route::delete('eliminarsolicitud/{id}', 'deleteSolicitudById');
+    Route::post('agregarsolicitud', 'nuevasolicitud');
+    Route::get('app/public/ruta_del_archivo/{nombreArchivo}', 'descargarArchivo');
+});
